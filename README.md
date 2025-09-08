@@ -7,6 +7,10 @@ A comprehensive blockchain-based food origin tracking system built on Ethereum u
 
 **FoodTrace-Blockchain food origin tracking system** - https://reaishma.github.io/Food-provenance--Blockchain-for-transperancy/
 
+## Developer 
+ 
+**Reaishma N**
+
 ## Overview 
 
 FoodTrace is a comprehensive blockchain-based food origin tracking system that provides complete transparency and immutable tracking of food products from farm to table. The application leverages Ethereum blockchain technology to create a secure and verifiable supply chain record, enabling consumers to trace the complete journey of their food products including origin, processing, and distribution stages.
