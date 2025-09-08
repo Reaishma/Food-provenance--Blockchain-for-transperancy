@@ -20,6 +20,8 @@ The system successfully combines a modern, responsive web frontend with smart co
 
 ## Recent Changes
 
+![features](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%205_29_44%20PM%20GMT%2B05_30.png)
+
 **September 8, 2025:**
 - Successfully implemented complete FoodTrace blockchain application with attractive landing page design
 - Created comprehensive Solidity smart contract (FoodTracker.sol) with full supply chain tracking functionality
