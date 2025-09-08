@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>FoodTrace - Fixed Desktop Layout with QR Code</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <style>
+        /* Dark Theme Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0a0a0b;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Dark Navigation */
+        .navbar {
+            background: rgba(10, 10, 11, 0.95);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 140, 66, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-logo i {
+            color: #ff6b35;
+            font-size: 2rem;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #cbd5e0;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #ff6b35;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Dark Hero Section */
+        .hero {
+            padding: 140px 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0a0a0b 0%, #1a1a1b 50%, #0a0a0b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 140, 66, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 140, 66, 0.06) 0%, transparent 50%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            color: #e2e8f0;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            font-weight: 900;
+            font-size: 4.2rem;
+            line-height: 1;
+            margin-top: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            font-weight: 500;
+            color: #a0aec0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ff6b35;
+            border: 2px solid #ff6b35;
+        }
+
+        .btn-secondary:hover {
+            background: #ff6b35;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Supply Chain Flow Section */
+        .supply-chain-flow {
+            padding: 100px 0;
+            background: #0a0a0b;
+        }
+
+        .supply-chain-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: #fff;
+        }
+
+        .supply-chain-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #a0aec0;
+            margin-bottom: 5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chain-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateX(10px);
+        }
+
+        .flow-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .flow-step:nth-child(even):hover {
+            transform: translateX(-10px);
+        }
+
+        .step-image {
+            width: 300px;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .step-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .step-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 140, 66, 0.2), rgba(255, 107, 53, 0.2));
+        }
+
+        .step-info {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-info h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .step-info p {
+            color: #a0aec0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Dark Features Section */
+        .features {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #111111 0%, #0a0a0b 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            color: #fff;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            border-radius: 2px;
+        }
+
+        .features-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(255, 140, 66, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .feature-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .feature-content p {
+            color: #a0aec0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Dark Track Section */
+        .track-section {
+            padding: 100px 0;
+            background: #0a0a0b;
+        }
+
+        .track-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .track-form {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 107, 53, 0.1));
+            border: 1px solid rgba(255, 140, 66, 0.2);
+            padding: 50px;
+            border-radius: 25px;
+            margin-bottom: 4rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: end;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            color: #e2e8f0;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 18px 24px;
+            border: 1px solid rgba(255, 140, 66, 0.3);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2);
+            transform: scale(1.02);
+        }
+
+        .form-group input::placeholder {
+            color: #a0aec0;
+        }
+
+        .qr-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-qr {
+            padding: 12px 24px;
+            border: 2px solid #ff6b35;
+            border-radius: 25px;
+            background: transparent;
+            color: #ff6b35;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .btn-qr:hover {
+            background: #ff6b35;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .qr-modal-content {
+            background: #1a1a1b;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 140, 66, 0.3);
+        }
+
+        .qr-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ff6b35;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .qr-code-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .track-results {
+            background: transparent;
+            border-radius: 20px;
+            padding: 3rem 0;
+            min-height: 250px;
+            display: none;
+            border: 1px solid rgba(255, 140, 66, 0.1);
+        }
+
+        /* Dark Verify Section */
+        .verify-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #111111 0%, #0a0a0b 100%);
+        }
+
+        /* FIXED: Remove grid layout, use flexbox */
+        .verify-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .verify-container {
+                flex-direction: row;
+                gap: 4rem;
+            }
+        }
+
+        .blockchain-status {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 140, 66, 0.1);
+        }
+
+        .status-card h4 {
+            margin-bottom: 1.5rem;
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4a5568;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(74, 85, 104, 0.5);
+        }
+
+        .status-dot.online {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            box-shadow: 0 0 25px rgba(72, 187, 120, 0.4);
+        }
+
+        .status-dot.offline {
+            background: linear-gradient(45deg, #f56565, #e53e3e);
+            box-shadow: 0 0 25px rgba(245, 101, 101, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .transaction-info {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 140, 66, 0.1);
+        }
+
+        .transactions-list {
+            margin-top: 1.5rem;
+        }
+
+        .transaction-item {
+            padding: 1.5rem;
+            border-left: 4px solid #ff6b35;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .transaction-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.1);
+        }
+
+        /* Dark About Section - FIXED LAYOUT AND FONT SIZES */
+        .about-section {
+            padding: 100px 0;
+            background: #0a0a0b;
+        }
+
+        /* FIXED: Remove grid layout, use flexbox */
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .about-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        .about-text {
+            flex: 2;
+        }
+
+        /* FIXED: Consistent font size for all content */
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #a0aec0;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+
+        .tech-stack {
+            list-style: none;
+        }
+
+        /* FIXED: Consistent font size matching the paragraph text */
+        .tech-stack li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .tech-stack i {
+            color: #ff6b35;
+            font-size: 1.4rem;
+            width: 25px;
+        }
+
+        .about-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        /* FIXED Footer - No Grid Layout */
+        .footer {
+            background: #111111;
+            color: #a0aec0;
+            padding: 5rem 0 2rem;
+            border-top: 1px solid rgba(255, 140, 66, 0.1);
+        }
+
+        /* FIXED: Use flexbox instead of grid */
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 4rem;
+            }
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        /* FIXED: Proper font hierarchy */
+        .footer-section h4 {
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 1rem;
+            color: #cbd5e0;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section li:hover {
+            color: #ff6b35;
+        }
+
+        .footer-section p {
+            color: #a0aec0;
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2d3748;
+            padding-top: 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        /* FIXED Tracking Results - Better desktop visibility */
+        .tracking-results {
+            background: transparent;
+            padding: 2rem 0;
+        }
+
+        .product-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 140, 66, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .product-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .product-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .product-id {
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            display: inline-block;
+        }
+
+        /* FIXED: Better desktop layout for timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline {
+                padding-left: 5rem;
+            }
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #ff8c42, #ff6b35);
+            border-radius: 2px;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline::before {
+                left: 40px;
+                width: 6px;
+            }
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-item {
+                padding-left: 4rem;
+            }
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2rem;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+            border: 4px solid #0a0a0b;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-marker {
+                left: -3rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+                border: 6px solid #0a0a0b;
+            }
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-left: 4px solid rgba(255, 140, 66, 0.5);
+            margin-left: 1rem;
+            border-radius: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-content {
+                padding: 3rem;
+                border-left: 6px solid rgba(255, 140, 66, 0.5);
+                margin-left: 2rem;
+            }
+        }
+
+        /* FIXED: Proper font hierarchy for headings vs content */
+        .timeline-content h5 {
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-content h5 {
+                font-size: 1.6rem;
+            }
+        }
+
+        .timeline-content p {
+            margin-bottom: 0.5rem;
+            color: #a0aec0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-content p {
+                font-size: 1.1rem;
+            }
+        }
+
+        .timeline-content small {
+            color: #718096;
+            font-size: 0.8rem;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            display: block;
+            margin-top: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            line-height: 1.3;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-content small {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+        }
+
+        .details-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .details-grid {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+            
+            .detail-item {
+                flex: 1;
+                min-width: 300px;
+            }
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-bottom: 1px solid rgba(255, 140, 66, 0.1);
+            color: #e2e8f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item strong {
+            color: #ff6b35;
+            font-size: 1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-item {
+            font-size: 1rem;
+        }
+
+        .journey-timeline h4 {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .journey-timeline h4 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .product-details h4 {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .product-details h4 {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .highlight {
+                font-size: 2.8rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .form-group input {
+                min-width: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .feature-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .feature-icon i {
+                font-size: 1.5rem;
+            }
+            
+            .flow-step {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .flow-step:nth-child(even) {
+                flex-direction: column;
+            }
+            
+            .flow-step:hover,
+            .flow-step:nth-child(even):hover {
+                transform: translateY(-5px);
+            }
+            
+            .step-image {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .supply-chain-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>FoodTrace</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#track" class="nav-link">Track Food</a>
+                <a href="#verify" class="nav-link">Verify</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Track Your Food From 
+                    <span class="highlight">Farm to Table</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Revolutionary blockchain technology ensures complete transparency in your food supply chain. 
+                    Verify origin, quality, and authenticity with unbreakable cryptographic proof.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('track')">
+                        <i class="fas fa-search"></i>
+                        Track Food Now
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('features')">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supply Chain Flow Section -->
+    <section class="supply-chain-flow">
+        <div class="container">
+            <h2 class="supply-chain-title">Your Food's Journey</h2>
+            <p class="supply-chain-subtitle">
+                Follow the complete path of your food from farm to table, verified at every step by blockchain technology
+            </p>
+            <div class="chain-flow">
+                <div class="flow-step">
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Organic farm with fresh vegetables">
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">1</div>
+                        <h3>Farm Origin</h3>
+                        <p>Certified organic farms with blockchain-verified growing conditions, soil quality, and sustainable harvesting practices. Every seed planted and every crop harvested is recorded immutably on the blockchain.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Food processing facility">
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">2</div>
+                        <h3>Processing & Quality</h3>
+                        <p>Smart contract verification of processing standards, quality tests, and safety certifications. Temperature controls, hygiene protocols, and quality inspections are all digitally verified and stored.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Delivery truck and logistics">
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">3</div>
+                        <h3>Distribution</h3>
+                        <p>Temperature-controlled logistics with real-time tracking and immutable delivery records. GPS tracking, temperature logs, and handling conditions are continuously monitored and verified.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Grocery store with fresh produce">
+                    </div>
+                    <div class="step-info">
+                        <div class="step-number">4</div>
+                        <h3>Retail & Consumer</h3>
+                        <p>Final verification at point of sale with complete transparency for informed consumer choices. Scan QR codes to access the complete journey and make confident purchasing decisions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Blockchain-Powered Features</h2>
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Instant QR Tracking</h3>
+                        <p>Scan any product QR code to instantly access its complete blockchain journey from farm to your table</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Tamper-Proof Records</h3>
+                        <p>Immutable Ethereum blockchain records ensure data integrity with cryptographic proof of authenticity</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Complete Transparency</h3>
+                        <p>Access detailed origin information, processing methods, and quality certifications for every product</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Real-Time Updates</h3>
+                        <p>Live tracking updates throughout the supply chain with timestamp verification and location data</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Mobile Verification</h3>
+                        <p>Consumer-friendly mobile interface for easy product verification and supply chain exploration</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Quality Assurance</h3>
+                        <p>Multi-point quality verification with digital certificates and ratings from authorized inspectors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Track Food Section -->
+    <section id="track" class="track-section">
+        <div class="container">
+            <h2 class="section-title">Track Your Food Product</h2>
+            <div class="track-container">
+                <div class="track-form">
+                    <div class="form-group">
+                        <label for="productId">Enter Product ID or Scan QR Code</label>
+                        <input type="text" id="productId" placeholder="Enter product ID (e.g., FT001234567)">
+                        <button class="btn btn-primary" onclick="trackFood()">
+                            <i class="fas fa-search"></i>
+                            Track Product
+                        </button>
+                    </div>
+                    <div class="qr-actions">
+                        <button class="btn-qr" onclick="generateSampleQR()">
+                            <i class="fas fa-qrcode"></i>
+                            Generate Sample QR
+                        </button>
+                        <button class="btn-qr" onclick="startQRScanner()">
+                            <i class="fas fa-camera"></i>
+                            Scan QR Code
+                        </button>
+                    </div>
+                </div>
+                <div class="track-results" id="trackResults">
+                    <!-- Results will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QR Modal -->
+    <div id="qrModal" class="qr-modal" style="display: none;">
+        <div class="qr-modal-content">
+            <button class="qr-close" onclick="closeQRModal()">&times;</button>
+            <h3 style="color: #fff; margin-bottom: 1rem;">Sample Product QR Code</h3>
+            <div class="qr-code-container" id="qrCodeContainer">
+                <!-- QR code will be generated here -->
+            </div>
+            <p style="color: #a0aec0; margin-top: 1rem;">Scan this QR code or enter the product ID: <strong>FT001234567</strong></p>
+            <button class="btn btn-primary" onclick="useQRCode()" style="margin-top: 1rem;">
+                <i class="fas fa-arrow-right"></i>
+                Track This Product
+            </button>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qrScannerModal" class="qr-modal" style="display: none;">
+        <div class="qr-modal-content">
+            <button class="qr-close" onclick="stopQRScanner()">&times;</button>
+            <h3 style="color: #fff; margin-bottom: 1rem;">QR Code Scanner</h3>
+            <video id="qrVideo" style="width: 100%; max-width: 300px; border-radius: 10px;" autoplay></video>
+            <p style="color: #a0aec0; margin-top: 1rem;">Point your camera at a QR code to scan</p>
+            <button class="btn btn-secondary" onclick="stopQRScanner()" style="margin-top: 1rem;">
+                Close Scanner
+            </button>
+        </div>
+    </div>
+
+    <!-- Verify Section -->
+    <section id="verify" class="verify-section">
+        <div class="container">
+            <h2 class="section-title">Blockchain Verification</h2>
+            <div class="verify-container">
+                <div class="blockchain-status">
+                    <div class="status-card">
+                        <h4><i class="fas fa-network-wired"></i> Network Status</h4>
+                        <div class="status-indicator">
+                            <span class="status-dot" id="networkStatus"></span>
+                            <span id="networkText">Checking network...</span>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <h4><i class="fas fa-file-contract"></i> Smart Contracts</h4>
+                        <div class="status-indicator">
+                            <span class="status-dot" id="contractStatus"></span>
+                            <span id="contractText">Loading contracts...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="transaction-info">
+                    <h4><i class="fas fa-exchange-alt"></i> Recent Blockchain Activity</h4>
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Transactions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About FoodTrace Technology</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        FoodTrace represents the next generation of supply chain management, utilizing the power of Ethereum blockchain technology to create an unbreakable chain of trust from farm to consumer. Our platform combines multiple smart contracts built with Solidity to handle every aspect of food tracking and verification.
+                    </p>
+                    <ul class="tech-stack">
+                        <li><i class="fab fa-ethereum"></i> Ethereum Blockchain Network</li>
+                        <li><i class="fas fa-code"></i> Solidity Smart Contracts</li>
+                        <li><i class="fas fa-tools"></i> Truffle Development Framework</li>
+                        <li><i class="fas fa-cube"></i> Ganache Local Blockchain</li>
+                        <li><i class="fas fa-link"></i> Web3.js Integration Layer</li>
+                        <li><i class="fas fa-mobile-alt"></i> MetaMask Wallet Support</li>
+                    </ul>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">50,000+</div>
+                        <div class="stat-label">Products Tracked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1,200+</div>
+                        <div class="stat-label">Verified Farms</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">99.99%</div>
+                        <div class="stat-label">System Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>FoodTrace</h4>
+                    <p>Revolutionizing food safety and transparency through blockchain technology. Building trust in every bite.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Blockchain Stack</h4>
+                    <ul>
+                        <li>Ethereum Network</li>
+                        <li>Solidity Contracts</li>
+                        <li>Truffle Framework</li>
+                        <li>Web3.js Library</li>
+                        <li>IPFS Storage</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Real-time Tracking</li>
+                        <li>Quality Verification</li>
+                        <li>Origin Certification</li>
+                        <li>Smart Contracts</li>
+                        <li>Mobile Support</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FoodTrace. Blockchain-powered food tracking system for demonstration purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FoodTrace Professional Blockchain Application
+        class FoodTrace {
+            constructor() {
+                this.web3 = null;
+                this.contract = null;
+                this.userAccount = null;
+                this.init();
+            }
+
+            async init() {
+                await this.loadWeb3();
+                this.setupEventListeners();
+                this.updateStatus();
+                this.loadSampleData();
+            }
+
+            async loadWeb3() {
+                try {
+                    if (typeof Web3 !== 'undefined') {
+                        this.web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+                        
+                        if (window.ethereum) {
+                            try {
+                                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                                const accounts = await this.web3.eth.getAccounts();
+                                this.userAccount = accounts[0];
+                                this.updateNetworkStatus('online', 'Connected to Ethereum Network');
+                            } catch (error) {
+                                this.updateNetworkStatus('offline', 'MetaMask connection rejected');
+                            }
+                        } else {
+                            this.updateNetworkStatus('online', 'Connected to Local Blockchain');
+                        }
+                        
+                        this.updateContractStatus('online', 'Smart Contracts Deployed');
+                    } else {
+                        this.updateNetworkStatus('offline', 'Web3 provider not available');
+                        this.updateContractStatus('offline', 'Contracts unavailable');
+                    }
+                } catch (error) {
+                    console.error('Web3 initialization error:', error);
+                    this.updateNetworkStatus('offline', 'Connection failed');
+                }
+            }
+
+            updateNetworkStatus(status, text) {
+                const statusDot = document.getElementById('networkStatus');
+                const statusText = document.getElementById('networkText');
+                
+                if (statusDot && statusText) {
+                    statusDot.className = `status-dot ${status}`;
+                    statusText.textContent = text;
+                }
+            }
+
+            updateContractStatus(status, text) {
+                const statusDot = document.getElementById('contractStatus');
+                const statusText = document.getElementById('contractText');
+                
+                if (statusDot && statusText) {
+                    statusDot.className = `status-dot ${status}`;
+                    statusText.textContent = text;
+                }
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+            }
+
+            async trackFood() {
+                const productId = document.getElementById('productId').value;
+                const resultsContainer = document.getElementById('trackResults');
+                
+                if (!productId) {
+                    alert('Please enter a valid product ID to track');
+                    return;
+                }
+
+                resultsContainer.style.display = 'block';
+                resultsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #ff6b35; margin-bottom: 1.5rem;"></i>
+                        <p style="font-size: 1.3rem; color: #e2e8f0;">Querying blockchain network...</p>
+                        <p style="color: #a0aec0; margin-top: 0.5rem; font-size: 1.1rem;">Verifying product authenticity and supply chain data</p>
+                    </div>
+                `;
+
+                setTimeout(() => {
+                    this.displayProfessionalResults(productId, resultsContainer);
+                }, 2500);
+            }
+
+            displayProfessionalResults(productId, container) {
+                const sampleData = this.generateProfessionalData(productId);
+                
+                container.innerHTML = `
+                    <div class="tracking-results">
+                        <div class="product-header">
+                            <h3><i class="fas fa-box-open"></i> ${sampleData.name}</h3>
+                            <span class="product-id">ID: ${productId}</span>
+                        </div>
+                        
+                        <div class="journey-timeline">
+                            <h4><i class="fas fa-route"></i> Blockchain Supply Chain Journey</h4>
+                            <div class="timeline">
+                                ${sampleData.journey.map((step, index) => `
+                                    <div class="timeline-item ${step.status}">
+                                        <div class="timeline-marker">
+                                            <i class="${step.icon}"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>${step.stage}</h5>
+                                            <p><strong>Location:</strong> ${step.location}</p>
+                                            <p><strong>Date:</strong> ${step.date}</p>
+                                            <p><strong>Status:</strong> ${step.statusText}</p>
+                                            <p><strong>Verified By:</strong> ${step.verifier}</p>
+                                            <small>
+                                                Blockchain Hash: ${step.hash}
+                                            </small>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="product-details">
+                            <h4><i class="fas fa-info-circle"></i> Product Verification Details</h4>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-map-marker-alt"></i> Origin Farm:</strong>
+                                    ${sampleData.origin}
+                                </div>
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-leaf"></i> Organic Status:</strong>
+                                    ${sampleData.organic ? 'Certified Organic' : 'Conventional'}
+                                </div>
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-star"></i> Quality Score:</strong>
+                                    ${sampleData.qualityScore}/10 (Verified)
+                                </div>
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-certificate"></i> Certifications:</strong>
+                                    ${sampleData.certifications.join(', ')}
+                                </div>
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-calendar-alt"></i> Harvest Date:</strong>
+                                    ${sampleData.harvestDate}
+                                </div>
+                                <div class="detail-item">
+                                    <strong><i class="fas fa-shield-check"></i> Blockchain Verified:</strong>
+                                    ${sampleData.blockchainVerified ? 'Fully Verified ✓' : 'Pending Verification'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateProfessionalData(productId) {
+                const products = {
+                    'FT001234567': {
+                        name: 'Premium Organic Tomatoes',
+                        origin: 'Sunshine Valley Organic Farm, Fresno County, CA',
+                        organic: true,
+                        qualityScore: 9.4,
+                        certifications: ['USDA Organic', 'Non-GMO Verified', 'Fair Trade Certified'],
+                        harvestDate: '2025-08-15',
+                        blockchainVerified: true,
+                        journey: [
+                            {
+                                stage: 'Farm Origin & Harvest',
+                                location: 'Sunshine Valley Farm, Fresno, CA',
+                                date: '2025-08-15 06:30 AM',
+                                status: 'completed',
+                                statusText: 'Harvested & Quality Checked',
+                                verifier: 'Farm Inspector #A127',
+                                icon: 'fas fa-tractor',
+                                hash: '0xa7f8c2d9e1b4f3a6c8e2d5f9b1a4c7e0'
+                            },
+                            {
+                                stage: 'Processing & Packaging',
+                                location: 'FreshPack Processing Facility, CA',
+                                date: '2025-08-16 02:15 PM',
+                                status: 'completed',
+                                statusText: 'Processed & Packaged',
+                                verifier: 'Quality Control #Q456',
+                                icon: 'fas fa-industry',
+                                hash: '0xb9d1e5f8a2c6d3e7f0a4b8c1e5f9a2d6'
+                            },
+                            {
+                                stage: 'Cold Chain Distribution',
+                                location: 'Western Distribution Hub, NV',
+                                date: '2025-08-18 11:45 AM',
+                                status: 'completed',
+                                statusText: 'Temperature Controlled Transit',
+                                verifier: 'Logistics Manager #L789',
+                                icon: 'fas fa-truck-loading',
+                                hash: '0xc3e7f1a5d8b2c6f0a3e7d1b5f8a2c6e0'
+                            },
+                            {
+                                stage: 'Retail Distribution',
+                                location: 'Premium Foods Market #123',
+                                date: '2025-08-20 08:20 AM',
+                                status: 'completed',
+                                statusText: 'Available for Purchase',
+                                verifier: 'Store Manager #S321',
+                                icon: 'fas fa-store-alt',
+                                hash: '0xd5f9a3c7e1b6d0f4a8c2e6f0a3d7b1c5'
+                            }
+                        ]
+                    }
+                };
+
+                return products[productId] || {
+                    name: 'Organic Food Product',
+                    origin: 'Verified Organic Farm',
+                    organic: true,
+                    qualityScore: 8.7,
+                    certifications: ['Organic Certified', 'Quality Assured'],
+                    harvestDate: '2025-08-20',
+                    blockchainVerified: true,
+                    journey: [
+                        {
+                            stage: 'Farm Origin',
+                            location: 'Organic Farm Facility',
+                            date: new Date().toISOString().split('T')[0],
+                            status: 'completed',
+                            statusText: 'Successfully Tracked',
+                            verifier: 'Farm Inspector',
+                            icon: 'fas fa-tractor',
+                            hash: '0x' + Math.random().toString(16).substr(2, 32)
+                        }
+                    ]
+                };
+            }
+
+            updateStatus() {
+                setInterval(() => {
+                    this.updateBlockchainTransactions();
+                }, 8000);
+            }
+
+            updateBlockchainTransactions() {
+                const transactionsList = document.getElementById('transactionsList');
+                if (transactionsList) {
+                    const transactions = [
+                        {
+                            id: '0xa7f8c2d9',
+                            type: 'Product Registration',
+                            product: 'Organic Strawberries',
+                            time: '3 minutes ago',
+                            status: 'confirmed'
+                        },
+                        {
+                            id: '0xb9d1e5f8',
+                            type: 'Quality Verification',
+                            product: 'Free Range Eggs',
+                            time: '7 minutes ago',
+                            status: 'confirmed'
+                        },
+                        {
+                            id: '0xc3e7f1a5',
+                            type: 'Location Update',
+                            product: 'Grass-Fed Beef',
+                            time: '12 minutes ago',
+                            status: 'confirmed'
+                        },
+                        {
+                            id: '0xd5f9a3c7',
+                            type: 'Origin Certification',
+                            product: 'Wild-Caught Salmon',
+                            time: '18 minutes ago',
+                            status: 'confirmed'
+                        }
+                    ];
+
+                    transactionsList.innerHTML = transactions.map(tx => `
+                        <div class="transaction-item">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #fff; margin-bottom: 0.5rem; font-size: 1.1rem;">
+                                        ${tx.type}: ${tx.product}
+                                    </div>
+                                    <small style="color: #a0aec0; font-family: 'Courier New', monospace;">
+                                        Hash: ${tx.id}...
+                                    </small>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="color: #ff6b35; font-weight: 600; font-size: 1rem;">
+                                        ${tx.time}
+                                    </div>
+                                    <small style="color: #48bb78; font-weight: 600;">
+                                        ✓ ${tx.status}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            loadSampleData() {
+                const productIdInput = document.getElementById('productId');
+                if (productIdInput) {
+                    productIdInput.placeholder = 'Try sample ID: FT001234567';
+                }
+
+                this.updateBlockchainTransactions();
+            }
+        }
+
+        // QR Code Functionality
+        function generateSampleQR() {
+            const qrModal = document.getElementById('qrModal');
+            const qrContainer = document.getElementById('qrCodeContainer');
+            const sampleData = 'https://foodtrace.demo/track/FT001234567';
+            
+            // Clear previous QR code
+            qrContainer.innerHTML = '';
+            
+            // Generate QR code using QRCode.js library
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(qrContainer, sampleData, {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }, function (error) {
+                    if (error) {
+                        console.error(error);
+                        qrContainer.innerHTML = '<div style="width: 200px; height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">QR Code Preview</div>';
+                    }
+                });
+            } else {
+                // Fallback if QRCode library is not loaded
+                qrContainer.innerHTML = '<div style="width: 200px; height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666; border-radius: 10px;">QR Code Preview<br/>FT001234567</div>';
+            }
+            
+            qrModal.style.display = 'flex';
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        function useQRCode() {
+            document.getElementById('productId').value = 'FT001234567';
+            closeQRModal();
+            trackFood();
+        }
+
+        function startQRScanner() {
+            const scannerModal = document.getElementById('qrScannerModal');
+            const video = document.getElementById('qrVideo');
+            
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    scannerModal.style.display = 'flex';
+                    
+                    // Simulate QR code detection after 3 seconds
+                    setTimeout(() => {
+                        alert('QR Code Detected: FT001234567\nUse the sample tracking feature instead.');
+                        stopQRScanner();
+                        document.getElementById('productId').value = 'FT001234567';
+                    }, 3000);
+                })
+                .catch(function(error) {
+                    console.error('Camera access denied:', error);
+                    alert('Camera access is required for QR code scanning. Please enable camera permissions and try again, or use the Generate Sample QR feature instead.');
+                });
+        }
+
+        function stopQRScanner() {
+            const scannerModal = document.getElementById('qrScannerModal');
+            const video = document.getElementById('qrVideo');
+            
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+            
+            scannerModal.style.display = 'none';
+        }
+
+        // Initialize application
+        let foodTraceApp;
+        document.addEventListener('DOMContentLoaded', () => {
+            foodTraceApp = new FoodTrace();
+        });
+
+        // Global helper functions
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function trackFood() {
+            if (foodTraceApp) {
+                foodTraceApp.trackFood();
+            }
+        }
+    </script>
+</body>
+</html>
