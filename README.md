@@ -170,6 +170,8 @@ Lightweight Express.js server architecture:
 
 ## 🔗 Smart Contracts
 
+![Tracking product](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%205_32_42%20PM%20GMT%2B05_30.png)
+
 ### FoodOrigin.sol
 Manages farm and origin information:
 - Farm registration and verification
