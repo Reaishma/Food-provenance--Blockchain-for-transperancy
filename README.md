@@ -7,8 +7,60 @@ A comprehensive blockchain-based food origin tracking system built on Ethereum u
 
 **FoodTrace-Blockchain food origin tracking system** - https://reaishma.github.io/Food-provenance--Blockchain-for-transperancy/
 
+## Overview 
 
-## 🌟 Features
+FoodTrace is a comprehensive blockchain-based food origin tracking system that provides complete transparency and immutable tracking of food products from farm to table. The application leverages Ethereum blockchain technology to create a secure and verifiable supply chain record, enabling consumers to trace the complete journey of their food products including origin, processing, and distribution stages.
+
+The system successfully combines a modern, responsive web frontend with smart contract integration, offering real-time tracking capabilities, quality scoring, and certification verification. Users can input product IDs to retrieve comprehensive tracking information, view supply chain stages with visual timelines, and verify the authenticity and quality of food products through blockchain-verified data.
+
+## Recent Changes
+
+**September 8, 2025:**
+- Successfully implemented complete FoodTrace blockchain application with attractive landing page design
+- Created comprehensive Solidity smart contract (FoodTracker.sol) with full supply chain tracking functionality
+- Built modern responsive web interface with glassmorphism effects, animated blockchain visualization, and smooth scrolling navigation
+- Integrated Web3.js for blockchain connectivity with MetaMask and Ganache support
+- Added functional food tracking system with timeline visualization and product details display
+- Configured Express.js server with API endpoints and workflow for port 5000
+- Set up complete Truffle development environment with migration scripts
+
+
+## Project Architecture
+
+### Frontend Architecture
+The frontend features a modern single-page application built with vanilla JavaScript using a class-based architecture (`FoodTrace` class). The design incorporates:
+- Responsive glassmorphism UI with gradient backgrounds
+- Animated blockchain visualization showing farm-to-table journey
+- Smooth scrolling navigation between sections
+- Interactive food tracking with visual timeline results
+- Real-time blockchain status indicators
+- Sample transaction display with periodic updates
+
+### Blockchain Integration
+
+Complete Ethereum blockchain integration through:
+- **Web3.js**: Direct blockchain communication and smart contract interaction
+- **MetaMask Support**: Browser wallet connectivity for real users
+- **Ganache Fallback**: Local development blockchain on port 7545
+- **Automatic Network Detection**: Seamless switching between live and development networks
+- **Transaction Monitoring**: Real-time status updates and transaction history
+
+### Smart Contract System
+The FoodTracker.sol smart contract provides:
+- **Product Registration**: Secure on-chain food product registration with metadata
+- **Supply Chain Events**: Immutable tracking of each stage (farm, processing, distribution, retail)
+- **Authorization System**: Role-based access control for supply chain actors
+- **Quality Scoring**: On-chain quality assessment and certification tracking
+- **Verification Methods**: Product authenticity verification with event count validation
+
+### Backend Services
+Lightweight Express.js server architecture:
+- **Static File Serving**: Serves the web application and assets
+- **API Simulation**: Mock blockchain responses for development testing (`/api/track/:productId`)
+- **CORS Support**: Enables cross-origin requests for Web3 integration
+- **Status Endpoints**: Real-time blockchain and contract status reporting
+
+##  Features 
 
 - **Blockchain Transparency**: Complete supply chain visibility on Ethereum
 - **Smart Contracts**: Solidity-based contracts for food origin and product management
@@ -29,13 +81,19 @@ A comprehensive blockchain-based food origin tracking system built on Ethereum u
 ### Frontend
 - **HTML5/CSS3**: Modern responsive design
 - **JavaScript ES6+**: Client-side functionality
-- **Font Awesome**: Icon library
+- **Font Awesome 6.0.0**: Icon library
 - **Professional UI**: Orange color scheme with realistic visuals
 
 ### Backend
-- **Node.js**: Runtime environment
-- **Express.js**: Web server framework
-- **CORS**: Cross-origin resource sharing
+- **Express.js 5.1.0**: Web server framework
+- **CORS 2.8.5**: Cross-origin resource sharing middleware
+- **Node.js 20**: Runtime environment
+
+### Development Tools
+- **NPM**: Package management and scripts
+- **Replit Workflow**: Automated server deployment on port 5000
+- **Git**: Version control (automatic commits)
+
 
 ## 📁 Project Structure
 
@@ -131,7 +189,16 @@ Main contract for supply chain events:
 - **Responsive Layout**: Works on desktop, tablet, and mobile
 - **Interactive Tracking**: Product ID search with visual timeline
 - **Blockchain Status**: Live network and contract status indicators
+- **About Section**: Technology stack display with statistics and certifications
+- **Responsive Design**: Mobile-first approach with adaptive layouts
 - **Supply Chain Visualization**: Step-by-step journey display
+
+### Development Environment
+Complete blockchain development setup:
+- **Truffle Configuration**: Smart contract compilation and deployment
+- **Migration Scripts**: Automated contract deployment processes
+- **Ganache Integration**: Local blockchain for development and testing
+- **NPM Workflow**: Automated server startup and dependency management
 
 ## 📱 Usage
 
