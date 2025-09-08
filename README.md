@@ -45,6 +45,8 @@ The frontend features a modern single-page application built with vanilla JavaSc
 
 ### Blockchain Integration
 
+![Blockchain features](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%205_31_42%20PM%20GMT%2B05_30.png)
+
 Complete Ethereum blockchain integration through:
 - **Web3.js**: Direct blockchain communication and smart contract interaction
 - **MetaMask Support**: Browser wallet connectivity for real users
