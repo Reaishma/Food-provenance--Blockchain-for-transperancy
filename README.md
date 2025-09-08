@@ -2,6 +2,7 @@
 
 A comprehensive blockchain-based food origin tracking system built on Ethereum using Solidity smart contracts, Truffle framework, and Web3.js integration.
 
+![Overview](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%205_28_59%20PM%20GMT%2B05_30.png)
 
 # 🚀 Live 
 
