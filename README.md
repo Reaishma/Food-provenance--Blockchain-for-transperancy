@@ -69,6 +69,8 @@ Lightweight Express.js server architecture:
 
 ##  Features 
 
+![Features](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%205_30_19%20PM%20GMT%2B05_30.png)
+
 - **Blockchain Transparency**: Complete supply chain visibility on Ethereum
 - **Smart Contracts**: Solidity-based contracts for food origin and product management
 - **Real-time Tracking**: Live tracking of food products from farm to consumer
