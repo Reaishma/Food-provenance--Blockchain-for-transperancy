@@ -247,6 +247,8 @@ truffle console --network development
 
 ## 📊 Smart Contract Functions
 
+![tracking](https://github.com/Reaishma/Food-provenance--Blockchain-for-transperancy/blob/main/chrome_screenshot_Sep%208%2C%202025%207_45_43%20PM%20GMT%2B05_30.png)
+
 ### Key Functions
 - `registerProduct()` - Register new food product
 - `addSupplyChainEvent()` - Add supply chain stage
